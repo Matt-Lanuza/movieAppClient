@@ -4,3 +4,26 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/*fonts*/
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+
+/*AppNavbar*/
+/*background*/
+.bg-body-tertiary {
+  background-color: #2A3E50 !important;
+}
+
+/*logo*/
+.logo-name {
+  font-family: 'Lobster', sans-serif;
+  color: #F5F5DC;
+  font-size: 40px;
+
+}
+
+/*navbar-collapse*/
+.navbar-collapse {
+  color: #FFC107;
+}
