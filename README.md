@@ -7,11 +7,11 @@
 
 - Admin User
     - email: "admin@movies.com"
-    - password: "admin123"
+    - password: "admin1234"
 
 - Non-admin User
     - email: "dummy@movies.com"
-    - password: "dummy123"
+    - password: "dummy1234"
 
 ## References
 
