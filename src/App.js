@@ -22,7 +22,7 @@ function App() {
         return;
       }
 
-      fetch('https://fitnessapi-lanuza.onrender.com/users/details', {
+      fetch('https://movie-catalog-systemapi-lanuza.onrender.com/users/details', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
