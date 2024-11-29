@@ -19,7 +19,7 @@ export default function AppNavbar() {
             
             {user.id !== null ? (
               <>
-                <Nav.Link href="/" className="navbar-collapse">My Workouts</Nav.Link>
+                <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
                 <Nav.Link href="/logout" className="navbar-collapse">Logout</Nav.Link>
               </>
             ) : (

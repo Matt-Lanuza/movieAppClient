@@ -11,7 +11,7 @@ export default function Banner() {
 
   const handleClick = () => {
     if (isAuthenticated) {
-      navigate('/workout');
+      navigate('/movies');
     } else {
       notyf.error('Please log in first to start your fitness journey!');
       navigate('/login');
