@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './context/UserContext';
 import AppNavbar from './components/AppNavbar';
+import Home from './pages/Home';
 
 function App() {
     const [user, setUser] = useState(() => {
@@ -57,12 +58,12 @@ function App() {
     <UserProvider value={{ user, setUser, unsetUser }}>
       <Router>
         <AppNavbar />
-{/*        <Routes>
+        <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
+{/*          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
-        </Routes>*/}
+          <Route path="/logout" element={<Logout />} />*/}
+        </Routes>
       </Router>
     </UserProvider>
   );
