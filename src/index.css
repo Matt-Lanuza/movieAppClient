@@ -7,6 +7,7 @@
 
 /*fonts*/
 @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bokor&display=swap');
 
 
 /*AppNavbar*/
@@ -19,11 +20,13 @@
 .logo-name {
   font-family: 'Lobster', sans-serif;
   color: #F5F5DC;
-  font-size: 40px;
+  font-size: 45px;
 
 }
 
 /*navbar-collapse*/
 .navbar-collapse {
+  font-family: 'Bokor', sans-serif;
   color: #FFC107;
+  font-size: 25px;
 }
