@@ -61,7 +61,7 @@ export default function Login() {
               setEmail('');
               setPassword('');
 
-              navigate('/workout');
+              navigate('/movies');
             });
         } else {
           notyf.error('Please double-check your credentials.');

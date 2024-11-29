@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Notyf } from 'notyf';
 
-export default function UserView () {
+export default function UserView() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -9,10 +9,19 @@ export default function UserView () {
 
   useEffect(() => {
     // Fetch movies from the backend
-    fetch('/api/movies')
+    fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
       .then((response) => response.json())
       .then((data) => {
-        setMovies(data);
+        console.log("Fetched data:", data); 
+
+        // Extract movies array from the response and set it to state
+        if (data && Array.isArray(data.movies)) {
+          setMovies(data.movies); // Set the movies array
+        } else {
+          console.error("Movies data is missing or not an array:", data);
+          notyf.error('Failed to load movies. Please try again later.');
+        }
+
         setLoading(false);
         notyf.success('Movies loaded successfully!');
       })
@@ -30,20 +39,26 @@ export default function UserView () {
 
   return (
     <div className="user-view">
-      <h2>All Movies</h2>
+      <h2 className="text-center my-3">All Movies</h2>
 
       {loading ? (
         <p>Loading movies...</p>
       ) : (
-        <div className="movie-cards">
-          {movies.map((movie) => (
-            <div key={movie.id} className="movie-card">
-              <h3>{movie.title}</h3>
-              <p>{movie.director}</p>
-              <p>{movie.year}</p>
-              <button onClick={() => handleViewDetails(movie)}>View Details</button>
-            </div>
-          ))}
+        <div className="movie-cards mt-5">
+          {movies.length > 0 ? (
+            movies.map((movie) => (
+              <div key={movie._id} className="movie-card">
+                <div className="movie-card-header">
+                  <h3 className="my-3">{movie.title}</h3>
+                </div>
+                <p><strong>Director:</strong> {movie.director}</p>
+                <p><strong>Year:</strong> {movie.year}</p>
+                <button className="view-details-btn" onClick={() => handleViewDetails(movie)}>View Details</button>
+              </div>
+            ))
+          ) : (
+            <p>No movies available.</p>
+          )}
         </div>
       )}
 
