@@ -4,19 +4,16 @@ import AddMovieModal from './AddMovieModal';
 import DeleteMovie from './DeleteMovie';
 import UpdateMovie from './UpdateMovie';
 
+
+const notyf = new Notyf();
+
 export default function AdminView() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false); 
-  const notyf = new Notyf(); 
+  const [showModal, setShowModal] = useState(false);
 
-  // Fetch movies from the API
+
   useEffect(() => {
-    fetchMovies();
-  }, []);
-
-  // Fetch movies from the API function
-  const fetchMovies = () => {
     setLoading(true);
     fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
       .then((response) => {
@@ -27,7 +24,28 @@ export default function AdminView() {
       })
       .then((data) => {
         console.log('Fetched movies:', data);
-        setMovies(data.movies); 
+        setMovies(data.movies);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching movies:', error);
+        setLoading(false);
+        notyf.error('Failed to load movies. Please try again later.');
+      });
+  }, []);
+
+  const fetchMovies = () => {
+    setLoading(true);
+    fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch movies.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Fetched movies after refresh:', data);
+        setMovies(data.movies);
         setLoading(false);
       })
       .catch((error) => {
@@ -92,7 +110,7 @@ export default function AdminView() {
                           />
                           <UpdateMovie 
                             movie={movie} 
-                            refreshMovies={fetchMovies} 
+                            refreshMovies={fetchMovies}
                           />
                         </div>
                       </td>
@@ -113,7 +131,7 @@ export default function AdminView() {
       <AddMovieModal 
         show={showModal} 
         handleClose={() => setShowModal(false)} 
-        refreshMovies={fetchMovies} 
+        refreshMovies={fetchMovies}  // Pass the refreshMovies function to AddMovieModal
       />
     </div>
   );
