@@ -15,16 +15,23 @@ export default function AppNavbar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             <Nav.Link href="/" className="navbar-collapse">Home</Nav.Link>
-            
-            {user ? (
+
+            {/* Movies link is always visible to all users */}
+            <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
+
+            {user.id !== null ? (
               <>
-                <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
-                {user.isAdmin === true && (
-                  <Nav.Link href="/movies" className="navbar-collapse">Admin Dashboard</Nav.Link>
+                {user.isAdmin === true ? (
+                  // Admin view
+                  <Nav.Link href="/admin" className="navbar-collapse">Admin Dashboard</Nav.Link>
+                ) : (
+                  // Regular user view
+                  <></>  // No additional link for regular users here
                 )}
                 <Nav.Link href="/logout" className="navbar-collapse">Logout</Nav.Link>
               </>
             ) : (
+              // If user is not logged in
               <>
                 <Nav.Link href="/login" className="navbar-collapse">Login</Nav.Link>
                 <Nav.Link href="/register" className="navbar-collapse">Register</Nav.Link>

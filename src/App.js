@@ -11,7 +11,7 @@ import Movies from './pages/Movies';
 function App() {
     const [user, setUser] = useState(() => {
       const savedUser = localStorage.getItem('user');
-      return savedUser ? JSON.parse(savedUser) : { id: null, isAdmin: false };
+      return savedUser ? JSON.parse(savedUser) : { id: null, isAdmin: null };
     });
 
     useEffect(() => {
@@ -56,6 +56,7 @@ function App() {
 
     function unsetUser() {
       localStorage.clear();
+      setUser({ id: null, isAdmin: null });
     }
 
 

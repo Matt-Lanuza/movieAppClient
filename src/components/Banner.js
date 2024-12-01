@@ -10,13 +10,14 @@ export default function Banner() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext); 
 
-  const isAuthenticated = !!localStorage.getItem('token');
+  // Check if user is authenticated by looking at the user context
+  const isAuthenticated = user && user.id !== null;
 
   const handleClick = () => {
     if (!isAuthenticated) {
       notyf.error('Please log in first to start your movie journey!');
       navigate('/login');
-    } else if (user && user.isAdmin) {
+    } else if (user.isAdmin) {
       notyf.success('Welcome, Admin! Navigating to the movies page.');
       navigate('/movies');
     } else {
@@ -31,13 +32,11 @@ export default function Banner() {
         <p>Bringing the magic of movies to your screen!</p>
 
         {/* Conditionally show button text and action based on user.isAdmin */}
-        <Button variant="danger" onClick={handleClick}>
-          {isAuthenticated
-            ? user && user.isAdmin
-              ? 'Check Dashboard'
-              : 'Join the Movie Adventure'
-            : 'Login to Continue'}
-        </Button>
+        {isAuthenticated && (
+          <Button variant="danger" onClick={handleClick}>
+            {user.isAdmin ? 'Check Dashboard' : 'Join the Movie Adventure'}
+          </Button>
+        )}
       </Col>
     </Row>
   );
