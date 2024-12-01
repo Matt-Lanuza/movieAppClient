@@ -4,12 +4,13 @@ import { Notyf } from 'notyf';
 import GetComments from '../components/GetComments';
 import AddComment from '../components/AddComment';
 
+const notyf = new Notyf();
+
 export default function MovieDetails() {
   const { id } = useParams();  // Get the movie ID from the URL
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState([]); // Track comments here
-  const notyf = new Notyf();
 
   // Fetch movie details and comments
   useEffect(() => {
@@ -31,13 +32,38 @@ export default function MovieDetails() {
       });
 
     // Fetch comments for the movie
-    fetchComments();
-  }, [id]);
+    const fetchComments = () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return;
+      }
 
-  const fetchComments = () => {
+      fetch(`https://movie-catalog-systemapi-lanuza.onrender.com/movies/getComments/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.comments) {
+            setComments(data.comments); 
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching comments:", error);
+        });
+    };
+
+    fetchComments();
+  }, [id]); // No need to include fetchComments in the dependency array
+
+  // Callback to handle adding a new comment and updating the list
+  const handleNewComment = () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      return; // Exit if no token
+      return;
     }
 
     fetch(`https://movie-catalog-systemapi-lanuza.onrender.com/movies/getComments/${id}`, {
@@ -50,17 +76,12 @@ export default function MovieDetails() {
       .then((response) => response.json())
       .then((data) => {
         if (data && data.comments) {
-          setComments(data.comments); 
+          setComments(data.comments); // Update comments
         }
       })
       .catch((error) => {
         console.error("Error fetching comments:", error);
       });
-  };
-
-  // Callback to handle adding a new comment and updating the list
-  const handleNewComment = () => {
-    fetchComments();
   };
 
   return (
