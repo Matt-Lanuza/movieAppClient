@@ -43,7 +43,7 @@ export default function MovieDetails() {
       )}
       <div className="text-center mt-3">
         <p>
-          <a href="/movies">Back to movie list</a>
+          <a href="/movies">Return to movie list</a>
         </p>
       </div>
     </div>
