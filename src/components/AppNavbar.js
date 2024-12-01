@@ -16,7 +16,7 @@ export default function AppNavbar() {
           <Nav className="ms-auto">
             <Nav.Link href="/" className="navbar-collapse">Home</Nav.Link>
             
-            {user && user.id !== null && !user.isAdmin && (
+            {!user.isAdmin && (
               <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
             )}
 
