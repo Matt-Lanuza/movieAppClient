@@ -8,9 +8,9 @@ const notyf = new Notyf();
 
 export default function Banner() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext); // Get user context
+  const { user } = useContext(UserContext); 
 
-  const isAuthenticated = !!localStorage.getItem('token'); // Check if user is authenticated
+  const isAuthenticated = !!localStorage.getItem('token');
 
   const handleClick = () => {
     if (!isAuthenticated) {
