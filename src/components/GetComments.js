@@ -6,7 +6,7 @@ export default function GetComments({ movieId }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Or get token from another source like Context API
+    const token = localStorage.getItem('token');
 
     if (!token) {
       setError('You must be logged in to view comments.');
@@ -24,7 +24,7 @@ export default function GetComments({ movieId }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched comments:", data);
-        setComments(data.comments); // Assuming comments array is directly available
+        setComments(data.comments);
         setLoading(false);
       })
       .catch((error) => {

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Notyf } from 'notyf';
-import GetComments from '../components/GetComments'; 
+import GetComments from '../components/GetComments';
+import AddComment from '../components/AddComment'; 
 
 export default function MovieDetails() {
   const { id } = useParams();  // Get the movie ID from the URL
@@ -28,28 +29,32 @@ export default function MovieDetails() {
       });
   }, [id]);
 
-  return (
-    <div className="movie-details">
-      {loading ? (
-        <p>Loading movie details...</p>
-      ) : movie ? (
-        <>
-          <h3>{movie.title}</h3>
-          <p><strong>Director:</strong> {movie.director}</p>
-          <p><strong>Year:</strong> {movie.year}</p>
-          <p><strong>Description:</strong> {movie.description}</p>
+    return (
+      <div className="movie-details">
+        {loading ? (
+          <p>Loading movie details...</p>
+        ) : movie ? (
+          <>
+            <h3>{movie.title}</h3>
+            <p><strong>Director:</strong> {movie.director}</p>
+            <p><strong>Year:</strong> {movie.year}</p>
+            <p><strong>Description:</strong> {movie.description}</p>
 
-          <GetComments movieId={id} /> 
+            {/* Add Comment Form */}
+            <AddComment movieId={id} movieTitle={movie.title} /> 
 
-        </>
-      ) : (
-        <p>Movie not found.</p>
-      )}
-      <div className="text-center mt-3">
-        <p>
-          <a href="/movies">Return to movie list</a>
-        </p>
+            {/* Display Comments */}
+            <GetComments movieId={id} />
+
+          </>
+        ) : (
+          <p>Movie not found.</p>
+        )}
+        <div className="text-center mt-3">
+          <p>
+            <a href="/movies">Return to movie list</a>
+          </p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
