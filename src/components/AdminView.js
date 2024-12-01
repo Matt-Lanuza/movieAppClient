@@ -1,32 +1,35 @@
 import { useState, useEffect } from 'react';
 import { Notyf } from 'notyf';
 import AddMovieModal from './AddMovieModal';
-import UpdateMovie from './UpdateMovie'; // Import the UpdateMovie component
-import DeleteMovie from './DeleteMovie'; // Import the DeleteMovie component
 
 export default function AdminView() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showAddModal, setShowAddModal] = useState(false); // For Add Movie modal
-  const [showUpdateModal, setShowUpdateModal] = useState(false); // For Update Movie modal
-  const [movieToUpdate, setMovieToUpdate] = useState(null); // Movie to update
-  const notyf = new Notyf();
+  const [showModal, setShowModal] = useState(false); 
+  const notyf = new Notyf(); 
 
   // Fetch movies from the API
   useEffect(() => {
     fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch movies.');
+        }
+        return response.json();
+      })
       .then((data) => {
-        setMovies(data.movies);
+        console.log('Fetched movies:', data);
+        setMovies(data.movies); 
         setLoading(false);
       })
       .catch((error) => {
+        console.error('Error fetching movies:', error);
         setLoading(false);
         notyf.error('Failed to load movies. Please try again later.');
       });
   }, []);
 
-  // Function to refresh the movie list after adding, updating, or deleting a movie
+  // Function to refresh the movie list after adding a new movie
   const refreshMovies = () => {
     setLoading(true);
     fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
@@ -37,29 +40,27 @@ export default function AdminView() {
       })
       .catch((error) => {
         setLoading(false);
-        notyf.error('Failed to refresh movie list.');
+        notyf.error('Failed to refresh movies list.');
       });
-  };
-
-  // Handle opening the Update Movie modal
-  const handleUpdateMovie = (movie) => {
-    setMovieToUpdate(movie);
-    setShowUpdateModal(true);
   };
 
   return (
     <div className="admin-dashboard">
+      {/* Sidebar */}
       <div className="admin-sidebar my-5 text-center">
         <h3>ADMIN DASHBOARD</h3>
       </div>
 
+      {/* Add Movie Button - Placed here above the table */}
       <div className="text-center mt-4 mb-4">
-        <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
+        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           Add New Movie
         </button>
       </div>
 
+      {/* Main Content */}
       <div className="admin-content">
+        {/* Movies List Section */}
         {loading ? (
           <p>Loading movies...</p>
         ) : (
@@ -84,21 +85,12 @@ export default function AdminView() {
                       <td>{movie.year}</td>
                       <td>{movie.description}</td>
                       <td>{movie.genre}</td>
-                      <td>
-                        <button onClick={() => handleUpdateMovie(movie)} className="btn btn-warning">
-                          Update
-                        </button>
-                        <DeleteMovie 
-                          movieId={movie._id || movie.id} 
-                          movies={movies} 
-                          setMovies={setMovies} 
-                        />
-                      </td>
+                      <td></td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6">No movies found.</td>
+                    <td colSpan="3">No movies found.</td>
                   </tr>
                 )}
               </tbody>
@@ -109,19 +101,10 @@ export default function AdminView() {
 
       {/* Add Movie Modal */}
       <AddMovieModal 
-        show={showAddModal} 
-        handleClose={() => setShowAddModal(false)} 
+        show={showModal} 
+        handleClose={() => setShowModal(false)} 
         refreshMovies={refreshMovies} 
       />
-
-      {/* Update Movie Modal */}
-      {showUpdateModal && (
-        <UpdateMovie 
-          movie={movieToUpdate} 
-          refreshMovies={refreshMovies} 
-          handleClose={() => setShowUpdateModal(false)} 
-        />
-      )}
     </div>
   );
 }
