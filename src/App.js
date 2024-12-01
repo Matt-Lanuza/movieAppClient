@@ -56,7 +56,6 @@ function App() {
 
     function unsetUser() {
       localStorage.clear();
-      setUser({ id: null, isAdmin: false });
     }
 
 

@@ -18,21 +18,13 @@ export default function AppNavbar() {
             
             {user ? (
               <>
-                {user.isAdmin ? (
-                  // Admin view
-                  <>
-                    <Nav.Link href="/movies" className="navbar-collapse">Admin Dashboard</Nav.Link>
-                  </>
-                ) : (
-                  // Regular user view
-                  <>
-                    <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
-                  </>
+                <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
+                {user.isAdmin === true && (
+                  <Nav.Link href="/movies" className="navbar-collapse">Admin Dashboard</Nav.Link>
                 )}
                 <Nav.Link href="/logout" className="navbar-collapse">Logout</Nav.Link>
               </>
             ) : (
-              // If user is not logged in
               <>
                 <Nav.Link href="/login" className="navbar-collapse">Login</Nav.Link>
                 <Nav.Link href="/register" className="navbar-collapse">Register</Nav.Link>
