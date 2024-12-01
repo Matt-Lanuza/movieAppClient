@@ -54,8 +54,8 @@ export default function Login() {
 
               if (userDetails) {
                 setUser({
-                  id: userDetails._id,
-                  isAdmin: userDetails.isAdmin
+                  id: userDetails.user._id,
+                  isAdmin: userDetails.user.isAdmin
                 });
               }
 

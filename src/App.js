@@ -43,6 +43,7 @@ function App() {
           } else {
             setUser({
               id: null,
+              isAdmin: null
             });
           }
         })
@@ -50,6 +51,7 @@ function App() {
           console.error('Error fetching user details:', err);
           setUser({
             id: null,
+            isAdmin: null
           });
         });
     }, []);
