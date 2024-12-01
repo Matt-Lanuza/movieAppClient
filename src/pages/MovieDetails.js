@@ -41,10 +41,10 @@ export default function MovieDetails() {
             <p><strong>Description:</strong> {movie.description}</p>
 
             {/* Add Comment Form */}
-            <AddComment movieId={id} movieTitle={movie.title} /> 
+            <AddComment movieId={id} movieTitle={movie.title}/> 
 
             {/* Display Comments */}
-            <GetComments movieId={id} />
+            <GetComments movieId={id}  />
 
           </>
         ) : (
