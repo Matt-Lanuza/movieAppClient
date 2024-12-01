@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Notyf } from 'notyf';
 import AddMovieModal from './AddMovieModal';
 import DeleteMovie from './DeleteMovie';
+import UpdateMovie from './UpdateMovie';
 
 export default function AdminView() {
   const [movies, setMovies] = useState([]);
@@ -65,12 +66,12 @@ export default function AdminView() {
             <table className="movie-table">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Director</th>
-                  <th>Year</th>
-                  <th>Description</th>
-                  <th>Genre</th>
-                  <th>Action</th>
+                  <th className="text-center">Title</th>
+                  <th className="text-center">Director</th>
+                  <th className="text-center">Year</th>
+                  <th className="text-center">Description</th>
+                  <th className="text-center">Genre</th>
+                  <th className="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,11 +84,17 @@ export default function AdminView() {
                       <td>{movie.description}</td>
                       <td>{movie.genre}</td>
                       <td>
-                        <DeleteMovie 
-                          movieId={movie._id}
-                          removeMovieFromList={removeMovieFromList} 
-                          refreshMovies={fetchMovies}
-                        />
+                        <div className="d-flex justify-content-between gap-3">
+                          <DeleteMovie 
+                            movieId={movie._id} 
+                            removeMovieFromList={removeMovieFromList} 
+                            refreshMovies={fetchMovies} 
+                          />
+                          <UpdateMovie 
+                            movie={movie} 
+                            refreshMovies={fetchMovies} 
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))
