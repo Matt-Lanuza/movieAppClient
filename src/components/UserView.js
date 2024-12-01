@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate from react
 export default function UserView() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const notyf = new Notyf();
 
   // Check if the user is authenticated by looking for a token in localStorage
@@ -39,9 +38,9 @@ export default function UserView() {
       });
   }, []);
 
-  const handleViewDetails = (movie) => {
-    setSelectedMovie(movie);
-    notyf.success(`Viewing details for: ${movie.title}`);
+  const handleViewDetails = (movieId) => {
+    notyf.success(`Viewing details for movie ID: ${movieId}`);
+    navigate(`/movie/${movieId}`);  // Redirect to the movie details page
   };
 
   const handleLoginRedirect = () => {
@@ -68,7 +67,9 @@ export default function UserView() {
 
                 {/* Only render the View Details button if the user is authenticated */}
                 {isAuthenticated ? (
-                  <button className="view-details-btn" onClick={() => handleViewDetails(movie)}>View Details</button>
+                  <button className="view-details-btn" onClick={() => handleViewDetails(movie._id)}>
+                    View Details
+                  </button>
                 ) : (
                   <button className="view-details-btn" onClick={handleLoginRedirect} style={{ backgroundColor: 'black', color: 'white' }}>
                     Please log in to view details.
@@ -79,15 +80,6 @@ export default function UserView() {
           ) : (
             <p>No movies available.</p>
           )}
-        </div>
-      )}
-
-      {selectedMovie && (
-        <div className="movie-details">
-          <h3>{selectedMovie.title} - Details</h3>
-          <p>Director: {selectedMovie.director}</p>
-          <p>Year: {selectedMovie.year}</p>
-          <p>{selectedMovie.description}</p>
         </div>
       )}
     </div>

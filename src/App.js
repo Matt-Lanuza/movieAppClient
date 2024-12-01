@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Register from './pages/Register';
 import Movies from './pages/Movies';
+import MovieDetails from './pages/MovieDetails';
 
 function App() {
     const [user, setUser] = useState(() => {
@@ -72,6 +73,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/movies" element={<Movies />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
         </Routes>
       </Router>
     </UserProvider>
