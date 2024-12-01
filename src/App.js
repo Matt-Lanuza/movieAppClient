@@ -11,7 +11,7 @@ import Movies from './pages/Movies';
 function App() {
     const [user, setUser] = useState(() => {
       const savedUser = localStorage.getItem('user');
-      return savedUser ? JSON.parse(savedUser) : { id: null };
+      return savedUser ? JSON.parse(savedUser) : { id: null, isAdmin: false };
     });
 
     useEffect(() => {
@@ -34,9 +34,11 @@ function App() {
           if (data !== undefined) {
             setUser({
               id: data.user.id,
+              isAdmin: data.user.isAdmin,
             });
             localStorage.setItem('user', JSON.stringify({
               id: data.user.id,
+              isAdmin: data.user.isAdmin
             }));
           } else {
             setUser({
@@ -54,7 +56,7 @@ function App() {
 
     function unsetUser() {
       localStorage.clear();
-      setUser({ id: null });
+      setUser({ id: null, isAdmin: false });
     }
 
 

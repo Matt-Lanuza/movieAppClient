@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import UserContext from '../context/UserContext';
 
 export default function AppNavbar() {
@@ -17,12 +16,23 @@ export default function AppNavbar() {
           <Nav className="ms-auto">
             <Nav.Link href="/" className="navbar-collapse">Home</Nav.Link>
             
-            {user.id !== null ? (
+            {user ? (
               <>
-                <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
+                {user.isAdmin ? (
+                  // Admin view
+                  <>
+                    <Nav.Link href="/admin" className="navbar-collapse">Admin Dashboard</Nav.Link>
+                  </>
+                ) : (
+                  // Regular user view
+                  <>
+                    <Nav.Link href="/movies" className="navbar-collapse">Movies</Nav.Link>
+                  </>
+                )}
                 <Nav.Link href="/logout" className="navbar-collapse">Logout</Nav.Link>
               </>
             ) : (
+              // If user is not logged in
               <>
                 <Nav.Link href="/login" className="navbar-collapse">Login</Nav.Link>
                 <Nav.Link href="/register" className="navbar-collapse">Register</Nav.Link>
@@ -34,4 +44,3 @@ export default function AppNavbar() {
     </Navbar>
   );
 }
-

@@ -3,111 +3,70 @@ import { Notyf } from 'notyf';
 
 export default function AdminView() {
   const [movies, setMovies] = useState([]);
-  const [newMovie, setNewMovie] = useState({ title: '', director: '', year: '', description: '' });
   const [loading, setLoading] = useState(true);
-  const notyf = new Notyf();
+  const notyf = new Notyf(); 
 
+  // Fetch movies from the API
   useEffect(() => {
     fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch movies.');
+        }
+        return response.json();
+      })
       .then((data) => {
-        setMovies(data);
+        console.log('Fetched movies:', data);
+        setMovies(data.movies); 
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching movies:", error);
+        console.error('Error fetching movies:', error);
         setLoading(false);
         notyf.error('Failed to load movies. Please try again later.');
       });
   }, []);
 
-  const handleCreateMovie = (e) => {
-    e.preventDefault();
-
-    fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/addMovie', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newMovie),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies([...movies, data]);
-        setNewMovie({ title: '', director: '', year: '', description: '' });
-        notyf.success('Movie added successfully!');
-      })
-      .catch((error) => {
-        console.error("Error creating movie:", error);
-        notyf.error('Failed to add movie. Please try again later.');
-      });
-  };
-
   return (
     <div className="admin-dashboard">
-      <div className="admin-sidebar">
-        <h3>Admin Dashboard</h3>
-        <ul>
-          <li>Create New Movie</li>
-          <li>Movies List</li>
-        </ul>
+      {/* Sidebar */}
+      <div className="admin-sidebar my-5 text-center">
+        <h3>ADMIN DASHBOARD</h3>
       </div>
 
+      {/* Main Content */}
       <div className="admin-content">
-        <h2>Create New Movie</h2>
-        <form onSubmit={handleCreateMovie}>
-          <label>Title</label>
-          <input
-            type="text"
-            value={newMovie.title}
-            onChange={(e) => setNewMovie({ ...newMovie, title: e.target.value })}
-            required
-          />
-          <label>Director</label>
-          <input
-            type="text"
-            value={newMovie.director}
-            onChange={(e) => setNewMovie({ ...newMovie, director: e.target.value })}
-            required
-          />
-          <label>Year</label>
-          <input
-            type="number"
-            value={newMovie.year}
-            onChange={(e) => setNewMovie({ ...newMovie, year: e.target.value })}
-            required
-          />
-          <label>Description</label>
-          <textarea
-            value={newMovie.description}
-            onChange={(e) => setNewMovie({ ...newMovie, description: e.target.value })}
-            required
-          />
-          <button type="submit">Create Movie</button>
-        </form>
-
-        <h3>Movies List</h3>
+        {/* Movies List Section */}
+        
         {loading ? (
           <p>Loading movies...</p>
         ) : (
-          <table className="movie-table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Director</th>
-                <th>Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {movies.map((movie) => (
-                <tr key={movie.id}>
-                  <td>{movie.title}</td>
-                  <td>{movie.director}</td>
-                  <td>{movie.year}</td>
+          <div className="movies-table-container">
+            <table className="movie-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Director</th>
+                  <th>Year</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {movies.length > 0 ? (
+                  movies.map((movie) => (
+                    <tr key={movie._id || movie.id}>
+                      <td>{movie.title}</td>
+                      <td>{movie.director}</td>
+                      <td>{movie.year}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">No movies found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

@@ -50,10 +50,12 @@ export default function Login() {
             .then((res) => res.json())
             .then((userDetails) => {
               console.log('User details:', userDetails);
+              console.log('User details:', userDetails.user.isAdmin);
 
               if (userDetails) {
                 setUser({
                   id: userDetails._id,
+                  isAdmin: userDetails.isAdmin
                 });
               }
 

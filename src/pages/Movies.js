@@ -5,20 +5,12 @@ import AdminView from '../components/AdminView';
 
 export default function MoviesPage() {
   const { user } = useContext(UserContext);
-  const [role, setRole] = useState('user'); 
+  console.log("is the user admin?", user.isAdmin);
 
-  useEffect(() => {
-    if (user && user.isAdmin) {
-      setRole('admin');
-    } else {
-      setRole('user');
-    }
-  }, [user]);
 
   return (
     <div className="movies-page">
-
-      {role === 'admin' ? (
+      {user && user.isAdmin === true ? (
         <AdminView />
       ) : (
         <UserView />
