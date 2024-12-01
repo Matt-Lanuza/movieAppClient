@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Notyf } from 'notyf';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 export default function UserView() {
   const [movies, setMovies] = useState([]);
@@ -7,12 +8,18 @@ export default function UserView() {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const notyf = new Notyf();
 
+  // Check if the user is authenticated by looking for a token in localStorage
+  const isAuthenticated = localStorage.getItem('token') !== null;
+
+  // Use navigate hook from react-router-dom for redirection
+  const navigate = useNavigate();
+
   useEffect(() => {
     // Fetch movies from the backend
     fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched data:", data); 
+        console.log("Fetched data:", data);
 
         // Extract movies array from the response and set it to state
         if (data && Array.isArray(data.movies)) {
@@ -37,6 +44,11 @@ export default function UserView() {
     notyf.success(`Viewing details for: ${movie.title}`);
   };
 
+  const handleLoginRedirect = () => {
+    // Redirect to the login page if the user is not authenticated
+    navigate('/login');
+  };
+
   return (
     <div className="user-view">
       <h2 className="text-center my-3">All Movies</h2>
@@ -53,7 +65,15 @@ export default function UserView() {
                 </div>
                 <p><strong>Director:</strong> {movie.director}</p>
                 <p><strong>Year:</strong> {movie.year}</p>
-                <button className="view-details-btn" onClick={() => handleViewDetails(movie)}>View Details</button>
+
+                {/* Only render the View Details button if the user is authenticated */}
+                {isAuthenticated ? (
+                  <button className="view-details-btn" onClick={() => handleViewDetails(movie)}>View Details</button>
+                ) : (
+                  <button className="view-details-btn" onClick={handleLoginRedirect} style={{ backgroundColor: 'black', color: 'white' }}>
+                    Please log in to view details.
+                  </button>
+                )}
               </div>
             ))
           ) : (
