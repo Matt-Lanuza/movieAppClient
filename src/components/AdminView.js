@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Notyf } from 'notyf';
+import AddMovieModal from './AddMovieModal'; // Import AddMovieModal
 
 export default function AdminView() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
   const notyf = new Notyf(); 
 
   // Fetch movies from the API
@@ -27,6 +29,21 @@ export default function AdminView() {
       });
   }, []);
 
+  // Function to refresh the movie list after adding a new movie
+  const refreshMovies = () => {
+    setLoading(true);
+    fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.movies);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        notyf.error('Failed to refresh movies list.');
+      });
+  };
+
   return (
     <div className="admin-dashboard">
       {/* Sidebar */}
@@ -34,10 +51,16 @@ export default function AdminView() {
         <h3>ADMIN DASHBOARD</h3>
       </div>
 
+      {/* Add Movie Button - Placed here above the table */}
+      <div className="text-center mt-4 mb-4">
+        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+          Add New Movie
+        </button>
+      </div>
+
       {/* Main Content */}
       <div className="admin-content">
         {/* Movies List Section */}
-        
         {loading ? (
           <p>Loading movies...</p>
         ) : (
@@ -48,6 +71,9 @@ export default function AdminView() {
                   <th>Title</th>
                   <th>Director</th>
                   <th>Year</th>
+                  <th>Description</th>
+                  <th>Genre</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -57,6 +83,9 @@ export default function AdminView() {
                       <td>{movie.title}</td>
                       <td>{movie.director}</td>
                       <td>{movie.year}</td>
+                      <td>{movie.description}</td>
+                      <td>{movie.genre}</td>
+                      <td></td>
                     </tr>
                   ))
                 ) : (
@@ -69,6 +98,13 @@ export default function AdminView() {
           </div>
         )}
       </div>
+
+      {/* Add Movie Modal */}
+      <AddMovieModal 
+        show={showModal} 
+        handleClose={() => setShowModal(false)} 
+        refreshMovies={refreshMovies} 
+      />
     </div>
   );
 }
