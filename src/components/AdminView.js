@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Notyf } from 'notyf';
 import AddMovieModal from './AddMovieModal';
+import DeleteMovie from './DeleteMovie';
 
 export default function AdminView() {
   const [movies, setMovies] = useState([]);
@@ -10,6 +11,12 @@ export default function AdminView() {
 
   // Fetch movies from the API
   useEffect(() => {
+    fetchMovies();
+  }, []);
+
+  // Fetch movies from the API function
+  const fetchMovies = () => {
+    setLoading(true);
     fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
       .then((response) => {
         if (!response.ok) {
@@ -27,21 +34,11 @@ export default function AdminView() {
         setLoading(false);
         notyf.error('Failed to load movies. Please try again later.');
       });
-  }, []);
+  };
 
-  // Function to refresh the movie list after adding a new movie
-  const refreshMovies = () => {
-    setLoading(true);
-    fetch('https://movie-catalog-systemapi-lanuza.onrender.com/movies/getMovies')
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies(data.movies);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        notyf.error('Failed to refresh movies list.');
-      });
+  // Remove movie from the list after deletion
+  const removeMovieFromList = (movieId) => {
+    setMovies((prevMovies) => prevMovies.filter((movie) => movie._id !== movieId));
   };
 
   return (
@@ -51,7 +48,7 @@ export default function AdminView() {
         <h3>ADMIN DASHBOARD</h3>
       </div>
 
-      {/* Add Movie Button - Placed here above the table */}
+      {/* Add Movie Button */}
       <div className="text-center mt-4 mb-4">
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           Add New Movie
@@ -79,18 +76,24 @@ export default function AdminView() {
               <tbody>
                 {movies.length > 0 ? (
                   movies.map((movie) => (
-                    <tr key={movie._id || movie.id}>
+                    <tr key={movie._id}>
                       <td>{movie.title}</td>
                       <td>{movie.director}</td>
                       <td>{movie.year}</td>
                       <td>{movie.description}</td>
                       <td>{movie.genre}</td>
-                      <td></td>
+                      <td>
+                        <DeleteMovie 
+                          movieId={movie._id}
+                          removeMovieFromList={removeMovieFromList} 
+                          refreshMovies={fetchMovies}
+                        />
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3">No movies found.</td>
+                    <td colSpan="6">No movies found.</td>
                   </tr>
                 )}
               </tbody>
@@ -103,7 +106,7 @@ export default function AdminView() {
       <AddMovieModal 
         show={showModal} 
         handleClose={() => setShowModal(false)} 
-        refreshMovies={refreshMovies} 
+        refreshMovies={fetchMovies} 
       />
     </div>
   );
