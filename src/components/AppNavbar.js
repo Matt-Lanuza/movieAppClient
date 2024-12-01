@@ -21,7 +21,7 @@ export default function AppNavbar() {
                 {user.isAdmin ? (
                   // Admin view
                   <>
-                    <Nav.Link href="/admin" className="navbar-collapse">Admin Dashboard</Nav.Link>
+                    <Nav.Link href="/movies" className="navbar-collapse">Admin Dashboard</Nav.Link>
                   </>
                 ) : (
                   // Regular user view

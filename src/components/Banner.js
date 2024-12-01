@@ -1,20 +1,26 @@
 import { Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
+import { useContext } from 'react';
+import UserContext from '../context/UserContext';
 
 const notyf = new Notyf();
 
 export default function Banner() {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext); // Get user context
 
-  const isAuthenticated = !!localStorage.getItem('token');
+  const isAuthenticated = !!localStorage.getItem('token'); // Check if user is authenticated
 
   const handleClick = () => {
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
+      notyf.error('Please log in first to start your movie journey!');
+      navigate('/login');
+    } else if (user && user.isAdmin) {
+      notyf.success('Welcome, Admin! Navigating to the movies page.');
       navigate('/movies');
     } else {
-      notyf.error('Please log in first to start your fitness journey!');
-      navigate('/login');
+      navigate('/movies');
     }
   };
 
@@ -23,10 +29,14 @@ export default function Banner() {
       <Col className="text-center py-5">
         <h1>Welcome to CineGuru</h1>
         <p>Bringing the magic of movies to your screen!</p>
-        
-        {/* Show the button only if the user is authenticated */}
+
+        {/* Conditionally show button text and action based on user.isAdmin */}
         <Button variant="danger" onClick={handleClick}>
-          Join the Movie Adventure
+          {isAuthenticated
+            ? user && user.isAdmin
+              ? 'Check Dashboard'
+              : 'Join the Movie Adventure'
+            : 'Login to Continue'}
         </Button>
       </Col>
     </Row>
