@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Notyf } from 'notyf';
+import GetComments from '../components/GetComments'; 
 
 export default function MovieDetails() {
   const { id } = useParams();  // Get the movie ID from the URL
@@ -37,6 +38,9 @@ export default function MovieDetails() {
           <p><strong>Director:</strong> {movie.director}</p>
           <p><strong>Year:</strong> {movie.year}</p>
           <p><strong>Description:</strong> {movie.description}</p>
+
+          <GetComments movieId={id} /> 
+
         </>
       ) : (
         <p>Movie not found.</p>
@@ -47,7 +51,5 @@ export default function MovieDetails() {
         </p>
       </div>
     </div>
-
-
   );
 }
