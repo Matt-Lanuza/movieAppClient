@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Notyf } from 'notyf';
 
-export default function AddComment({ movieId, movieTitle }) {
+export default function AddComment({ movieId, movieTitle, onNewComment }) {
   const [comment, setComment] = useState('');
   const notyf = new Notyf();
 
@@ -13,7 +13,6 @@ export default function AddComment({ movieId, movieTitle }) {
       return;
     }
 
-    // Assume the user is authenticated and we have their token
     const token = localStorage.getItem('token');
     if (!token) {
       notyf.error('You need to be logged in to add a comment.');
@@ -34,7 +33,8 @@ export default function AddComment({ movieId, movieTitle }) {
       .then((data) => {
         if (data) {
           notyf.success('Comment added successfully.');
-          setComment('');
+          setComment(''); // Clear input
+          onNewComment(); // Trigger the callback to re-fetch comments
         } else {
           notyf.error('Failed to add comment. Please try again later.');
         }
