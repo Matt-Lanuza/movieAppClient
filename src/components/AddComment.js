@@ -76,6 +76,7 @@ export default function AddComment({ movieId, movieTitle, onNewComment }) {
             cursor: 'pointer',
             fontSize: '16px',
           }}
+          id="addComment"
         >
           Submit
         </button>
